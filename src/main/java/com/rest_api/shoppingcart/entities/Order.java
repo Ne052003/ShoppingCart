@@ -1,4 +1,4 @@
-package com.RESTAPI.ShoppingCart.entities;
+package com.rest_api.shoppingcart.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 }
 

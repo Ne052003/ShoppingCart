@@ -1,4 +1,4 @@
-package com.RESTAPI.ShoppingCart;
+package com.rest_api.shoppingcart;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

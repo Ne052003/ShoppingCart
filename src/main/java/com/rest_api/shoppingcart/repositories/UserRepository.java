@@ -1,6 +1,6 @@
-package com.RESTAPI.ShoppingCart.repositories;
+package com.rest_api.shoppingcart.repositories;
 
-import com.RESTAPI.ShoppingCart.entities.User;
+import com.rest_api.shoppingcart.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

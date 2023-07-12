@@ -1,4 +1,4 @@
-package com.RESTAPI.ShoppingCart.entities;
+package com.rest_api.shoppingcart.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,6 +23,6 @@ public class User {
     @Column(nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
 }
