@@ -3,6 +3,8 @@ package com.RESTAPI.ShoppingCart.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "users")
@@ -20,4 +22,7 @@ public class User {
 
     @Column(nullable = false)
     private String address;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders;
 }
