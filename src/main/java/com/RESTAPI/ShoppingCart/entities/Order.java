@@ -1,4 +1,4 @@
-package com.shop.cart.entities;
+package com.RESTAPI.ShoppingCart.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
