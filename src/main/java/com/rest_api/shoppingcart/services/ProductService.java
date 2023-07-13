@@ -1,4 +1,4 @@
-package services;
+package com.rest_api.shoppingcart.services;
 
 import com.rest_api.shoppingcart.entities.Category;
 import com.rest_api.shoppingcart.entities.Product;
@@ -80,7 +80,7 @@ public class ProductService {
   }
 
   private boolean isInvalidProduct(Product product) {
-    return product.getName() == null || product.getPrice() >= 0d || product.getCategory() == null;
+    return product.getName() == null || product.getPrice() <= 0d || product.getCategory() == null;
   }
 
   private Optional<Category> getCategoryIfExists(Long categoryId) {

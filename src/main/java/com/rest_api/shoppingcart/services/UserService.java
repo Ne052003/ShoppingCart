@@ -1,4 +1,4 @@
-package services;
+package com.rest_api.shoppingcart.services;
 
 import com.rest_api.shoppingcart.entities.Buyer;
 import com.rest_api.shoppingcart.repositories.BuyerRepository;
