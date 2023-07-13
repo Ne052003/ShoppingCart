@@ -33,12 +33,14 @@ public class OrderService {
         return Optional.empty();
     }
 
-    public void cancelOrder(Long orderId) {
+    public boolean cancelOrder(Long orderId) {
         Optional<Order> optOrder = orderRepository.findById(orderId);
         if (optOrder.isPresent() && !optOrder.get().getCancelled()) {
             optOrder.get().setCancelled(true);
             orderRepository.save(optOrder.get());
+            return true;
         }
+        return false;
     }
 
     public Optional<Order> getOrderById(Long orderId) {
