@@ -6,7 +6,6 @@ import com.rest_api.shoppingcart.repositories.CategoryRepository;
 import com.rest_api.shoppingcart.repositories.ProductRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

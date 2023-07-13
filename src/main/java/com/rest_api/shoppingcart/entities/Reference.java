@@ -16,13 +16,13 @@ public class Reference {
     @Column
     @ManyToOne
     @JoinColumn(name = "buyer_id", nullable = false)
-    private Buyer buyerId;
+    private Buyer buyer;
 
     @Column
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product productId;
 
-    @Column
+    @Column(nullable = false)
     private String description;
 }
