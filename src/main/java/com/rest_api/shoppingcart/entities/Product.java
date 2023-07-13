@@ -3,6 +3,8 @@ package com.rest_api.shoppingcart.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "products")
@@ -21,4 +23,7 @@ public class Product {
   @ManyToOne
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
+
+  @OneToMany(mappedBy = "product")
+  private List<Reference> references;
 }
