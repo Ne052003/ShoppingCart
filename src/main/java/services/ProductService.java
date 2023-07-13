@@ -6,6 +6,8 @@ import com.rest_api.shoppingcart.repositories.CategoryRepository;
 import com.rest_api.shoppingcart.repositories.ProductRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,46 +16,51 @@ public class ProductService {
   @Autowired ProductRepository productRepository;
   @Autowired CategoryRepository categoryRepository;
 
-  public Product createProduct(Product product) {
+  public Optional<Product> createProduct(Product product) {
     if (isInvalidProduct(product)) {
-      return null;
+      return Optional.empty();
     }
 
-    Category category = getCategoryIfExists(product.getCategory().getCategoryId());
-    if (category == null) {
-      return null;
+    Optional<Category> category = getCategoryIfExists(product.getCategory().getCategoryId());
+    if (category.isEmpty()) {
+      return Optional.empty();
     }
 
-    product.setCategory(category);
-    return productRepository.save(product);
+    product.setCategory(category.get());
+    return Optional.of(productRepository.save(product));
   }
 
-  public Product updateProduct(Product product) {
+  public Optional<Product> updateProduct(Product product) {
     Optional<Product> existingProduct = productRepository.findById(product.getProductId());
 
     if (isInvalidProduct(product) || existingProduct.isEmpty()) {
-      return null;
+      return Optional.empty();
     }
 
-    Category category = getCategoryIfExists(product.getCategory().getCategoryId());
-    if (category == null) {
-      return null;
+    Optional<Category> category = getCategoryIfExists(product.getCategory().getCategoryId());
+    if (category.isEmpty()) {
+      return Optional.empty();
     }
 
     Product updatedProduct = existingProduct.get();
     updatedProduct.setName(product.getName());
     updatedProduct.setPrice(product.getPrice());
-    updatedProduct.setCategory(category);
+    updatedProduct.setCategory(category.get());
 
-    return productRepository.save(updatedProduct);
+    return Optional.of(productRepository.save(updatedProduct));
   }
 
-  public void deleteProduct(Long productId) {
-    productRepository.findById(productId).ifPresent(productRepository::delete);
+  public boolean deleteProduct(Long productId) {
+    if (productRepository.existsById(productId)) {
+      productRepository.deleteById(productId);
+      return true;
+    }
+    return false;
   }
 
-  public Product getProductById(Long productId) {
-    return productRepository.findById(productId).orElse(null);
+
+  public Optional<Product> getProductById(Long productId) {
+    return productRepository.findById(productId);
   }
 
   public List<Product> getAllProducts() {
@@ -61,21 +68,22 @@ public class ProductService {
   }
 
   public boolean setProductEnabled(Long productId, boolean enabled) {
-    return productRepository.findById(productId)
-            .map(product -> {
+    return productRepository
+        .findById(productId)
+        .map(
+            product -> {
               product.setEnabled(enabled);
               productRepository.save(product);
               return true;
             })
-            .orElse(false);
+        .orElse(false);
   }
-
 
   private boolean isInvalidProduct(Product product) {
-    return product.getName() == null || product.getPrice() <= 0d || product.getCategory() == null;
+    return product.getName() == null || product.getPrice() >= 0d || product.getCategory() == null;
   }
 
-  private Category getCategoryIfExists(Long categoryId) {
-    return categoryRepository.findById(categoryId).orElse(null);
+  private Optional<Category> getCategoryIfExists(Long categoryId) {
+    return categoryRepository.findById(categoryId);
   }
 }
