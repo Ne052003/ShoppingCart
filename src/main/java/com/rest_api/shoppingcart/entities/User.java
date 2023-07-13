@@ -3,8 +3,6 @@ package com.rest_api.shoppingcart.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Entity
 @Table(name = "users")
@@ -24,7 +22,4 @@ public abstract class User {
 
     @Column(nullable = false)
     private String address;
-
-/*    @OneToMany(mappedBy = "user")
-    private List<Order> orders;*/
 }

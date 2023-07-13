@@ -9,6 +9,7 @@ import lombok.Data;
 public class Reference {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reference_id")
     private Long referenceId;
 
