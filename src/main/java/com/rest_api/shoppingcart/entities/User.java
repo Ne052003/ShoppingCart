@@ -8,7 +8,9 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -23,6 +25,6 @@ public class User {
     @Column(nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders;
+/*    @OneToMany(mappedBy = "user")
+    private List<Order> orders;*/
 }

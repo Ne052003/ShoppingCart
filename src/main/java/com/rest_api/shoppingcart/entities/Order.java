@@ -19,8 +19,8 @@ public class Order {
     private LocalDateTime orderDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "buyer_id", nullable = false)
+    private Buyer buyer;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
