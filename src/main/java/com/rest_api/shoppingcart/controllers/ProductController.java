@@ -1,9 +1,14 @@
 package com.rest_api.shoppingcart.controllers;
 
+import com.rest_api.shoppingcart.entities.Category;
 import com.rest_api.shoppingcart.entities.Product;
+import com.rest_api.shoppingcart.repositories.CategoryRepository;
 import com.rest_api.shoppingcart.services.ProductService;
 import java.util.List;
 import java.util.Optional;
+
+import org.hibernate.Cache;
+import org.hibernate.sql.ast.tree.cte.CteTableGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +61,38 @@ public class ProductController {
       @PathVariable Long productId, @RequestParam(name = "enabled") boolean enabled) {
     boolean updated = productService.setProductEnabled(productId, enabled);
     return updated ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+  }
+
+  @GetMapping("/category/{categoryId}")
+  public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable Long id) {
+    List<Product> products = productService.getProductsByCategory(id);
+
+    if (products.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    return ResponseEntity.ok(products);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<Product>> searchProductsByName(@RequestParam("name") String name) {
+    List<Product> products = productService.searchProductsByName(name);
+
+    if (products.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    return ResponseEntity.ok(products);
+  }
+
+  @GetMapping("/search/{keyword}")
+  public ResponseEntity<List<Product>> searchProductsByKeywords(@PathVariable("keywords") String keywords) {
+    List<Product> products = productService.searchProductsByKeywords(keywords);
+
+    if (products.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+
+    return ResponseEntity.ok(products);
   }
 }

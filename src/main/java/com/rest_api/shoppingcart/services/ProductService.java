@@ -6,7 +6,6 @@ import com.rest_api.shoppingcart.repositories.CategoryRepository;
 import com.rest_api.shoppingcart.repositories.ProductRepository;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +56,6 @@ public class ProductService {
     return false;
   }
 
-
   public Optional<Product> getProductById(Long productId) {
     return productRepository.findById(productId);
   }
@@ -76,6 +74,19 @@ public class ProductService {
               return true;
             })
         .orElse(false);
+  }
+
+  public List<Product> getProductsByCategory(Long id) {
+    Optional<Category> optionalCategory = categoryRepository.findById(id);
+    return productRepository.findByCategory(optionalCategory.get());
+  }
+
+  public List<Product> searchProductsByName(String name) {
+    return productRepository.findByNameContaining(name);
+  }
+
+  public List<Product> searchProductsByKeywords(String keyword) {
+    return productRepository.findByKeywordsContaining(keyword);
   }
 
   private boolean isInvalidProduct(Product product) {
