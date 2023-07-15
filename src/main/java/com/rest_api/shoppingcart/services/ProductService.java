@@ -85,10 +85,6 @@ public class ProductService {
     return productRepository.findByNameContaining(name);
   }
 
-  public List<Product> searchProductsByKeywords(String keyword) {
-    return productRepository.findByKeywordsContaining(keyword);
-  }
-
   private boolean isInvalidProduct(Product product) {
     return product.getName() == null || product.getPrice() <= 0d || product.getCategory() == null;
   }

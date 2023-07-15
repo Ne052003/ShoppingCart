@@ -84,15 +84,4 @@ public class ProductController {
 
     return ResponseEntity.ok(products);
   }
-
-  @GetMapping("/search/{keyword}")
-  public ResponseEntity<List<Product>> searchProductsByKeywords(@PathVariable("keywords") String keywords) {
-    List<Product> products = productService.searchProductsByKeywords(keywords);
-
-    if (products.isEmpty()) {
-      return ResponseEntity.notFound().build();
-    }
-
-    return ResponseEntity.ok(products);
-  }
 }
