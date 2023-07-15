@@ -47,7 +47,7 @@ public class OrderService {
         return orderRepository.findById(orderId);
     }
 
-    public List<Order> getOrdersByUser(User user) {
-        return orderRepository.findByUser(user);
+    public List<Order> getOrdersByBuyer(User buyer) {
+        return orderRepository.findByBuyer(buyer);
     }
 }

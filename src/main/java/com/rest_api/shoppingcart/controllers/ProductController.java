@@ -51,7 +51,7 @@ public class ProductController {
     }
   }
 
-  @PatchMapping("/{productId}/enabled")
+  @PatchMapping("/enabled/{productId}")
   public ResponseEntity<Void> setProductEnabled(
       @PathVariable Long productId, @RequestParam(name = "enabled") boolean enabled) {
     boolean updated = productService.setProductEnabled(productId, enabled);

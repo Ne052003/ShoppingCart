@@ -50,8 +50,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getOrders(User user) {
-        List<Order> orders = orderService.getOrdersByUser(user);
+    public ResponseEntity<List<Order>> getOrders(User buyer) {
+        List<Order> orders = orderService.getOrdersByBuyer(buyer);
         if (!orders.isEmpty()) {
             return ResponseEntity.ok(orders);
         }

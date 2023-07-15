@@ -17,7 +17,7 @@ public class ReferenceService {
     private ProductRepository productRepository;
 
     public boolean createReference(Reference reference) {
-        Optional<Product> optProduct = productRepository.findById(reference.getProductId().getProductId());
+        Optional<Product> optProduct = productRepository.findById(reference.getProduct().getProductId());
         if (optProduct.isPresent() && validateReference(reference)) {
             referenceRepository.save(reference);
             return true;
