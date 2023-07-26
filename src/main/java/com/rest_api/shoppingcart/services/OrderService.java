@@ -1,7 +1,7 @@
 package com.rest_api.shoppingcart.services;
 
+import com.rest_api.shoppingcart.entities.Buyer;
 import com.rest_api.shoppingcart.entities.Order;
-import com.rest_api.shoppingcart.entities.User;
 import com.rest_api.shoppingcart.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class OrderService {
         return orderRepository.findById(orderId);
     }
 
-    public List<Order> getOrdersByUser(User user) {
-        return orderRepository.findByUser(user);
+    public List<Order> getOrdersByUser(Buyer buyer) {
+        return orderRepository.findByBuyer(buyer);
     }
 }

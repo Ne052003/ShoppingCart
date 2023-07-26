@@ -1,7 +1,7 @@
 package com.rest_api.shoppingcart.controllers;
 
+import com.rest_api.shoppingcart.entities.Buyer;
 import com.rest_api.shoppingcart.entities.Order;
-import com.rest_api.shoppingcart.entities.User;
 import com.rest_api.shoppingcart.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +50,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getOrders(User user) {
+    public ResponseEntity<List<Order>> getOrders(Buyer user) {
         List<Order> orders = orderService.getOrdersByUser(user);
         if (!orders.isEmpty()) {
             return ResponseEntity.ok(orders);
