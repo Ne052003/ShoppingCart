@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "references")
+@Table(name = "productReferences")
 public class Reference {
 
     @Id
@@ -13,16 +13,15 @@ public class Reference {
     @Column(name = "reference_id")
     private Long referenceId;
 
-    @Column
+    @Column(nullable = false)
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "buyer_id", nullable = false)
     private Buyer buyer;
 
-    @Column
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product productId;
+    private Product product;
 
-    @Column(nullable = false)
-    private String description;
 }
