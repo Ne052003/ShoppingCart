@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,12 +14,41 @@ public class UserService {
     @Autowired
     private BuyerRepository buyerRepository;
 
-    public boolean disableBuyer(Buyer buyer) {
-        Optional<Buyer> optBuyer = buyerRepository.findById(buyer.getUserId());
-        if (optBuyer.isPresent()) {
-            optBuyer.get().setDisabled(true);
-            return true;
+    public Optional<Buyer> createBuyer(Buyer buyer) {
+        try {
+            buyerRepository.save(buyer);
+            return buyerRepository.findByUsername(buyer.getUsername());
+        } catch (Exception ex) {
+            return Optional.empty();
         }
-        return false;
+    }
+
+    public Optional<Buyer> getUserByUsername(String username) {
+        return buyerRepository.findByUsername(username);
+    }
+
+    public List<Buyer> getAllBuyers() {
+        return buyerRepository.findAll();
+    }
+
+    public boolean disableBuyer(Long buyerId) {
+        try {
+            Optional<Buyer> optBuyer = buyerRepository.findById(buyerId);
+            optBuyer.orElseThrow().setDisabled(true);
+            buyerRepository.save(optBuyer.get());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean deleteBuyer(Buyer buyer) {
+        try {
+            Optional<Buyer> optBuyer = buyerRepository.findById(buyer.getUserId());
+            buyerRepository.delete(optBuyer.orElseThrow());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
