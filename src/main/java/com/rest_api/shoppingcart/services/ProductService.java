@@ -5,94 +5,99 @@ import com.rest_api.shoppingcart.entities.Product;
 import com.rest_api.shoppingcart.repositories.CategoryRepository;
 import com.rest_api.shoppingcart.repositories.ProductRepository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
-  @Autowired ProductRepository productRepository;
-  @Autowired CategoryRepository categoryRepository;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
 
-  public Optional<Product> createProduct(Product product) {
-    if (isInvalidProduct(product)) {
-      return Optional.empty();
+    public Optional<Product> createProduct(Product product) {
+        if (isInvalidProduct(product)) {
+            return Optional.empty();
+        }
+
+        Optional<Category> category = getCategoryIfExists(product.getCategory().getCategoryId());
+        if (category.isEmpty()) {
+            return Optional.empty();
+        }
+
+        product.setCategory(category.get());
+        return Optional.of(productRepository.save(product));
     }
 
-    Optional<Category> category = getCategoryIfExists(product.getCategory().getCategoryId());
-    if (category.isEmpty()) {
-      return Optional.empty();
+    public Optional<Product> updateProduct(Product product) {
+        Optional<Product> existingProduct = productRepository.findById(product.getProductId());
+
+        if (isInvalidProduct(product) || existingProduct.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Optional<Category> category = getCategoryIfExists(product.getCategory().getCategoryId());
+        if (category.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Product updatedProduct = existingProduct.get();
+        updatedProduct.setName(product.getName());
+        updatedProduct.setPrice(product.getPrice());
+        updatedProduct.setCategory(category.get());
+
+        return Optional.of(productRepository.save(updatedProduct));
     }
 
-    product.setCategory(category.get());
-    return Optional.of(productRepository.save(product));
-  }
-
-  public Optional<Product> updateProduct(Product product) {
-    Optional<Product> existingProduct = productRepository.findById(product.getProductId());
-
-    if (isInvalidProduct(product) || existingProduct.isEmpty()) {
-      return Optional.empty();
+    public boolean deleteProduct(Long productId) {
+        if (productRepository.existsById(productId)) {
+            productRepository.deleteById(productId);
+            return true;
+        }
+        return false;
     }
 
-    Optional<Category> category = getCategoryIfExists(product.getCategory().getCategoryId());
-    if (category.isEmpty()) {
-      return Optional.empty();
+    public Optional<Product> getProductById(Long productId) {
+        return productRepository.findById(productId);
     }
 
-    Product updatedProduct = existingProduct.get();
-    updatedProduct.setName(product.getName());
-    updatedProduct.setPrice(product.getPrice());
-    updatedProduct.setCategory(category.get());
-
-    return Optional.of(productRepository.save(updatedProduct));
-  }
-
-  public boolean deleteProduct(Long productId) {
-    if (productRepository.existsById(productId)) {
-      productRepository.deleteById(productId);
-      return true;
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
-    return false;
-  }
 
-  public Optional<Product> getProductById(Long productId) {
-    return productRepository.findById(productId);
-  }
+    public boolean setProductEnabled(Long productId, boolean enabled) {
+        return productRepository
+                .findById(productId)
+                .map(
+                        product -> {
+                            product.setEnabled(enabled);
+                            productRepository.save(product);
+                            return true;
+                        })
+                .orElse(false);
+    }
 
-  public Page<Product> getAllProducts(Pageable pageable) {
-    return productRepository.findAll(pageable);
-  }
+    public List<Product> getProductsByCategory(Long id) {
+        try {
+            Optional<Category> optionalCategory = categoryRepository.findById(id);
+            return productRepository.findByCategory(optionalCategory.orElseThrow());
+        } catch (Exception ex) {
+            return List.of();
+        }
+    }
 
-  public boolean setProductEnabled(Long productId, boolean enabled) {
-    return productRepository
-        .findById(productId)
-        .map(
-            product -> {
-              product.setEnabled(enabled);
-              productRepository.save(product);
-              return true;
-            })
-        .orElse(false);
-  }
+    public List<Product> searchProductsByName(String name) {
+        return productRepository.findByNameContaining(name);
+    }
 
-  public List<Product> getProductsByCategory(Long id) {
-    Optional<Category> optionalCategory = categoryRepository.findById(id);
-    return productRepository.findByCategory(optionalCategory.get());
-  }
+    private boolean isInvalidProduct(Product product) {
+        return product.getName() == null || product.getPrice() <= 0d || product.getCategory() == null;
+    }
 
-  public List<Product> searchProductsByName(String name) {
-    return productRepository.findByNameContaining(name);
-  }
-
-  private boolean isInvalidProduct(Product product) {
-    return product.getName() == null || product.getPrice() <= 0d || product.getCategory() == null;
-  }
-
-  private Optional<Category> getCategoryIfExists(Long categoryId) {
-    return categoryRepository.findById(categoryId);
-  }
+    private Optional<Category> getCategoryIfExists(Long categoryId) {
+        return categoryRepository.findById(categoryId);
+    }
 }
