@@ -1,5 +1,6 @@
 package com.rest_api.shoppingcart.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class Category {
   @Column(nullable = false)
   private String name;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "category", cascade = CascadeType.REFRESH)
   private List<Product> products;
 }
